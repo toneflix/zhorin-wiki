@@ -13,12 +13,12 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5">
-      <div className="max-w-6xl mx-auto px-6 py-20">
+      <div className="max-w-6xl mx-4 md:mx-auto px-6 py-20">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
             <div className="p-3 bg-accent/10 rounded-lg">
-              <Zap className="w-10 h-10 text-accent" />
+              <img src="/images/logo.png" className="w-10 h-10 text-accent" />
             </div>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
@@ -34,7 +34,6 @@ export default function Home() {
             </Button>
           </div>
         </div>
-
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           <Card>
@@ -67,6 +66,14 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
           </Card>
+        </div>
+
+        <div className="mb-16">
+          <img
+            src="/images/zhorin-true-blood.png"
+            alt="The Zhorin"
+            className="w-full rounded-lg shadow-lg"
+          />
         </div>
 
         {/* Quick Navigation */}
