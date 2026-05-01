@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NEXT_PUBLIC_BASE_PATH: / #zhorin-wiki
+          NEXT_PUBLIC_BASE_PATH: '' #zhorin-wiki
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
