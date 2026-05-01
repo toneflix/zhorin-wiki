@@ -1,16 +1,6 @@
-# Zhorin Universe Wiki
+# Zhorin Verse Wiki
 
-A premium sci-fi wiki documenting the Zhorin Universe, built for GitHub Pages as a static, fully-optimized site.
-
-## Features
-
-- **Complete Lore**: 12 comprehensive articles covering civilization, biology, technology, and philosophy
-- **⚡ Fast & Static**: Zero server required—pure HTML/CSS/JavaScript deployed to GitHub Pages
-- **Responsive Design**: Mobile-first layout with sidebar navigation on desktop
-- **Dark Mode First**: Premium sci-fi aesthetic with muted palette and subtle accents
-- **Full-Text Search Ready**: Search infrastructure for browsing articles
-- **Automatic Deployment**: GitHub Actions workflow handles builds and deployment
-- **Cross-Article Navigation**: Related articles, breadcrumbs, and glossary terms
+A premium sci-fi wiki documenting the Zhorin Verse, built for GitHub Pages as a static, fully-optimized site.
 
 ## Quick Start
 
@@ -40,7 +30,7 @@ See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed deployment ins
 2. Go to Settings → Pages
 3. Select "GitHub Actions" as source
 4. Update repo name in `.github/workflows/deploy.yml`
-5. Push again → automatic deployment 🚀
+5. Push again → automatic deployment
 
 ## Technology Stack
 
@@ -77,12 +67,13 @@ See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed deployment ins
 │   ├── 04-ukuhlan.mdx
 │   ├── 05-uhla.mdx
 │   ├── 06-uhlahukuhlan.mdx
-│   ├── 07-ahlizhii.mdx
-│   ├── 08-elder-consciousness.mdx
-│   ├── 09-indhiirho.mdx
-│   ├── 10-the-ix.mdx
+|   |── 07-zholahukuhlan.mdx
+│   ├── 08-ahlizhii.mdx
+│   ├── 09-amizhii.mdx
+│   ├── 10-indhiirho.mdx
 │   ├── 11-external-civilizations.mdx
-│   └── 12-timeline-lore.mdx
+│   ├── 12-timeline-lore.mdx
+│   └── 13-language-structure.mdx
 │
 ├── lib/
 │   └── wiki.ts                       # Content loading utilities
@@ -230,7 +221,7 @@ See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for full configuration.
 
 ## License
 
-This wiki and all content is provided as-is for the Zhorin Universe project.
+This wiki and all content is provided as-is for the Zhorin Verse project.
 
 ## Support
 

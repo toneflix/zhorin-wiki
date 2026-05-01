@@ -1,7 +1,14 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Zap, BookOpen, Lightbulb } from 'lucide-react'
+import { BookOpen, Lightbulb, Zap } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -15,10 +22,11 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
-            Zhorin Universe
+            Zhorin Verse
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
-            An advanced collective-driven civilization where perfect logic may be their greatest strength—and deepest limitation.
+            An advanced collective-driven civilization where perfect logic may
+            be their greatest strength—and deepest limitation.
           </p>
           <div className="flex gap-4 justify-center">
             <Button asChild size="lg">
@@ -33,23 +41,30 @@ export default function Home() {
             <CardHeader>
               <BookOpen className="w-8 h-8 mb-2 text-accent" />
               <CardTitle>Comprehensive Lore</CardTitle>
-              <CardDescription>Deep exploration of Zhorin civilization, biology, and technology</CardDescription>
+              <CardDescription>
+                Deep exploration of Zhorin civilization, biology, and technology
+              </CardDescription>
             </CardHeader>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <Lightbulb className="w-8 h-8 mb-2 text-accent" />
               <CardTitle>Complex Universe</CardTitle>
-              <CardDescription>Navigate intricate relationships, conflicts, and hidden truths</CardDescription>
+              <CardDescription>
+                Navigate intricate relationships, conflicts, and hidden truths
+              </CardDescription>
             </CardHeader>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <Zap className="w-8 h-8 mb-2 text-accent" />
               <CardTitle>Sci-Fi Deep Dive</CardTitle>
-              <CardDescription>Explore consciousness integration, biological evolution, and strategic dynamics</CardDescription>
+              <CardDescription>
+                Explore consciousness integration, biological evolution, and
+                strategic dynamics
+              </CardDescription>
             </CardHeader>
           </Card>
         </div>
@@ -62,36 +77,54 @@ export default function Home() {
               href="/wiki/the-zhorin"
               className="p-4 border border-border rounded-lg hover:bg-accent/5 transition-colors group"
             >
-              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">The Zhorin</h3>
-              <p className="text-sm text-muted-foreground">Discover the pale humanoid space-farers and their collective consciousness</p>
+              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">
+                The Zhorin
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Discover the pale humanoid space-farers and their collective
+                consciousness
+              </p>
             </Link>
-            
+
             <Link
               href="/wiki/uhla"
               className="p-4 border border-border rounded-lg hover:bg-accent/5 transition-colors group"
             >
-              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">Uhla</h3>
-              <p className="text-sm text-muted-foreground">Explore fracturing from the collective and the unique perspective it grants</p>
+              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">
+                Uhla
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Explore fracturing from the collective and the unique
+                perspective it grants
+              </p>
             </Link>
-            
+
             <Link
               href="/wiki/uhlahukuhlan"
               className="p-4 border border-border rounded-lg hover:bg-accent/5 transition-colors group"
             >
-              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">Uhlahukuhlan</h3>
-              <p className="text-sm text-muted-foreground">Rare beings combining collective logic with individual nuance</p>
+              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">
+                Uhlahukuhlan
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Rare beings combining collective logic with individual nuance
+              </p>
             </Link>
-            
+
             <Link
               href="/wiki/the-ix"
               className="p-4 border border-border rounded-lg hover:bg-accent/5 transition-colors group"
             >
-              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">The Ix</h3>
-              <p className="text-sm text-muted-foreground">A civilization that manipulated the Zhorin through pure logic</p>
+              <h3 className="font-semibold mb-2 group-hover:text-accent transition-colors">
+                The Ix
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                A civilization that manipulated the Zhorin through pure logic
+              </p>
             </Link>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

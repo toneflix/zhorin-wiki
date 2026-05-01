@@ -1,16 +1,23 @@
-import Link from 'next/link'
-import { getAllWikiEntries } from '@/lib/wiki'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+import { Search } from 'lucide-react';
+import { getAllWikiEntries } from '@/lib/wiki';
 
 export const metadata = {
   title: 'Wiki Index',
-  description: 'Browse all articles in the Zhorin Universe wiki',
-}
+  description: 'Browse all articles in the Zhorin Verse wiki',
+};
 
 export default async function WikiIndex() {
-  const entries = await getAllWikiEntries()
+  const entries = await getAllWikiEntries();
 
   return (
     <div className="bg-background min-h-screen">
@@ -18,7 +25,10 @@ export default async function WikiIndex() {
       <div className="relative overflow-hidden bg-gradient-to-b from-card to-background/50 border-b border-border/20">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute -bottom-32 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="absolute -bottom-32 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: '1s' }}
+          />
         </div>
 
         <div className="relative max-w-3xl mx-auto px-6 py-16">
@@ -26,7 +36,8 @@ export default async function WikiIndex() {
             Wiki Index
           </h1>
           <p className="text-lg md:text-xl text-foreground/70 leading-relaxed max-w-2xl">
-            Explore comprehensive documentation of the Zhorin Universe, from civilization and technology to philosophy and lore.
+            Explore comprehensive documentation of the Zhorin Verse, from
+            civilization and technology to philosophy and lore.
           </p>
         </div>
       </div>
@@ -67,7 +78,9 @@ export default async function WikiIndex() {
                         </span>
                       ))}
                       {entry.keywords.length > 3 && (
-                        <span className="text-xs text-foreground/50">+{entry.keywords.length - 3}</span>
+                        <span className="text-xs text-foreground/50">
+                          +{entry.keywords.length - 3}
+                        </span>
                       )}
                     </div>
                   </CardContent>
@@ -78,5 +91,5 @@ export default async function WikiIndex() {
         </div>
       </div>
     </div>
-  )
+  );
 }

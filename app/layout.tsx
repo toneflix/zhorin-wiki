@@ -1,16 +1,25 @@
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import './globals.css';
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+import { Geist, Geist_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+
+import { Analytics } from '@vercel/analytics/next';
+
+const _geist = Geist({ subsets: ['latin'] });
+const _geistMono = Geist_Mono({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Zhorin Universe Wiki',
-  description: 'A comprehensive wiki documenting the Zhorin Universe, their civilization, technology, and interactions with external civilizations',
+  title: 'Zhorin Verse Wiki',
+  description:
+    'A comprehensive wiki documenting the Zhorin Verse, their civilization, technology, and interactions with external civilizations',
   generator: 'v0.app',
-  keywords: ['Zhorin', 'science fiction', 'wiki', 'universe', 'collective consciousness'],
+  keywords: [
+    'Zhorin',
+    'science fiction',
+    'wiki',
+    'universe',
+    'collective consciousness',
+  ],
   icons: {
     icon: [
       {
@@ -28,19 +37,19 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className="bg-background">
@@ -49,5 +58,5 @@ export default function RootLayout({
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
-  )
+  );
 }

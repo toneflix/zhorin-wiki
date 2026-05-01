@@ -7,40 +7,50 @@ This document lists all optimizations applied to make the Zhorin Wiki fully opti
 ### Next.js Configuration (`next.config.mjs`)
 
 **Static Export**:
+
 ```javascript
-output: 'export'
+output: 'export';
 ```
+
 - Generates fully static `/out` directory
 - No Node.js runtime required
 - Pure static file serving from GitHub Pages CDN
 
 **MDX Support**:
+
 ```javascript
 const withMDX = mdx({
   extension: /\.mdx?$/,
-  options: { /* ... */ }
-})
+  options: {
+    /* ... */
+  },
+});
 
-export default withMDX(nextConfig)
+export default withMDX(nextConfig);
 ```
+
 - Enables MDX content files
 - Frontmatter parsing with gray-matter
 - Server-side rendering of markdown → static HTML
 
 **Base Path Configuration**:
+
 ```javascript
 basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
 ```
+
 - Supports both root and subdirectory deployment
 - GitHub Pages: `/repo-name` (set in CI workflow)
 - Local dev: `/` (default)
 
 **Image Optimization**:
+
 ```javascript
 images: {
   unoptimized: true,
 }
 ```
+
 - Required for static export
 - Images served as-is from `/public`
 - No image processing pipeline needed
@@ -48,6 +58,7 @@ images: {
 ### Package Dependencies
 
 **Added for GitHub Pages**:
+
 - `@next/mdx` — MDX compilation in Next.js
 - `@mdx-js/loader` — MDX loader
 - `@mdx-js/react` — MDX React integration
@@ -60,11 +71,13 @@ All dependencies are pre-built and statically importable, requiring no Node.js r
 ### GitHub Actions Workflow (`.github/workflows/deploy.yml`)
 
 **Automatic Trigger**:
+
 - Triggers on `push` to `main` branch
 - Runs on every commit → automatic deployment
 - Workflow dispatch enabled for manual re-runs
 
 **Build Steps**:
+
 1. Checkout code
 2. Setup pnpm (fast package manager)
 3. Setup Node.js v20 with pnpm caching
@@ -74,14 +87,17 @@ All dependencies are pre-built and statically importable, requiring no Node.js r
 7. Deploy artifact to GitHub Pages
 
 **Environment Variables**:
+
 ```yaml
 NEXT_PUBLIC_BASE_PATH: /zhorin-wiki
 ```
+
 - Set during build to match repository name
 - Baked into HTML/CSS at build time
 - Works across all pages and links
 
 **Deployment Method**:
+
 - Uses official `actions/upload-pages-artifact@v3`
 - Uses official `actions/deploy-pages@v4`
 - Automatic rollback on failure
@@ -96,14 +112,15 @@ All pages are **statically generated** at build time:
 ```typescript
 // app/wiki/[slug]/page.tsx
 export async function generateStaticParams() {
-  const entries = await getAllWikiEntries()
+  const entries = await getAllWikiEntries();
   return entries.map((entry) => ({
     slug: entry.slug,
-  }))
+  }));
 }
 ```
 
 **Results in**:
+
 - 16 static HTML files generated pre-deployment
 - Zero runtime computation
 - All links pre-validated
@@ -112,9 +129,10 @@ export async function generateStaticParams() {
 ### Content Loading
 
 **Server-side only** (`lib/wiki.ts`):
+
 ```typescript
 export async function getAllWikiEntries(): Promise<WikiEntry[]> {
-  const files = fs.readdirSync(WIKI_DIR)
+  const files = fs.readdirSync(WIKI_DIR);
   // Parse MDX files with frontmatter
   // Return fully-rendered content
 }
@@ -129,6 +147,7 @@ export async function getAllWikiEntries(): Promise<WikiEntry[]> {
 ### Zero JavaScript
 
 The wiki is **fully functional with JavaScript disabled**:
+
 - All content pre-rendered HTML
 - No client-side rendering
 - No hydration overhead
@@ -137,18 +156,21 @@ The wiki is **fully functional with JavaScript disabled**:
 ### Asset Optimization
 
 **Images**:
+
 - `unoptimized: true` — serve as-is
 - No Image component needed
 - Direct file serving via static export
 - Full browser caching
 
 **CSS**:
+
 - Tailwind CSS w/ v4 (PostCSS 4)
 - PurgeCSS automatically enabled
 - Only used styles included
 - Minimal bundle
 
 **JavaScript**:
+
 - Zero app JavaScript (pre-rendered)
 - Only browser built-ins used
 - No npm package overhead
@@ -157,12 +179,14 @@ The wiki is **fully functional with JavaScript disabled**:
 ### Content Organization
 
 **Minimal Structure**:
+
 - 12 MDX files
 - Clean folder hierarchy
 - No database required
 - File system only
 
 **Flat Build Output**:
+
 ```
 out/
 ├── index.html
@@ -184,7 +208,7 @@ out/
 
 ```tsx
 export const metadata: Metadata = {
-  title: 'Zhorin Universe Wiki',
+  title: 'Zhorin Verse Wiki',
   description: '...',
   keywords: ['Zhorin', 'science fiction', ...],
   // ... full SEO setup
@@ -196,6 +220,7 @@ export const viewport: Viewport = {
 ```
 
 **Optimized for**:
+
 - SEO (metadata on every page)
 - Open Graph (social media sharing)
 - Theme color (mobile browser chrome)
@@ -204,6 +229,7 @@ export const viewport: Viewport = {
 ### Base Path Integration
 
 Every internal link automatically uses `basePath`:
+
 ```tsx
 // These work on both / and /repo-name/
 <Link href="/wiki/the-zhorin" />
@@ -215,11 +241,13 @@ Next.js automatically prefixes with `basePath` at build time.
 ### Mobile-First Design
 
 **Responsive Breakpoints**:
+
 - Mobile: Full width
 - Tablet (md): 2-column with sidebar
 - Desktop (lg): 3-column with TOC
 
 **No Layout Shift**:
+
 - Proper aspect ratio locks
 - Stable DOM
 - PreloadFont strategies
@@ -229,6 +257,7 @@ Next.js automatically prefixes with `basePath` at build time.
 ### GitHub Pages CDN
 
 **Automatic Benefits**:
+
 - ✅ Global CDN (served from GitHub's infrastructure)
 - ✅ HTTP/2 multiplexing
 - ✅ Brotli compression
@@ -236,6 +265,7 @@ Next.js automatically prefixes with `basePath` at build time.
 - ✅ Zero cold start (pre-built files)
 
 **Deployment Time**:
+
 - ~2-5 minutes from push to live
 - Atomic deployments (no partial updates)
 - Automatic rollback on failure
@@ -243,6 +273,7 @@ Next.js automatically prefixes with `basePath` at build time.
 ### Caching Strategy
 
 **Build-time Hashing**:
+
 ```
 _next/static/
 ├── HASH1/
@@ -253,6 +284,7 @@ _next/static/
 ```
 
 **Cache Headers**:
+
 - Static content: `max-age=1year`
 - HTML: `max-age=0` (always revalidate)
 - Index pages: Stale-while-revalidate
@@ -262,6 +294,7 @@ _next/static/
 ### MDX Frontmatter
 
 Every article requires:
+
 ```yaml
 title: Display name
 slug: url-identifier
@@ -272,6 +305,7 @@ related: [Related Title]
 ```
 
 **Benefits**:
+
 - Enforces metadata
 - Enables sorting
 - Powers related articles
@@ -280,12 +314,14 @@ related: [Related Title]
 ### Content Processing
 
 **Markdown → Static HTML**:
+
 1. MDX files read at build time
 2. Frontmatter extracted (gray-matter)
 3. Content rendered → HTML
 4. Fully rendered HTML baked into page
 
 **No Runtime Processing**:
+
 - Zero markdown parsing on page load
 - All rendering happens once at build
 - No unnecessary recomputation
@@ -295,22 +331,25 @@ related: [Related Title]
 ### Meta Tags
 
 **Root Level**:
+
 - Title, description, keywords
 - OpenGraph images
 - Icons (light/dark theme)
 
 **Per-Article**:
+
 ```typescript
 export async function generateMetadata({ params }) {
   return {
     title: `${entry.title} - Zhorin Wiki`,
     description: entry.description,
     keywords: entry.keywords,
-  }
+  };
 }
 ```
 
 **Results**:
+
 - ✅ Unique meta on every page
 - ✅ Correct title format
 - ✅ Social sharing metadata
@@ -319,6 +358,7 @@ export async function generateMetadata({ params }) {
 ### Structured Data
 
 **Implicit from HTML**:
+
 - Semantic HTML (`<main>`, `<article>`)
 - Proper heading hierarchy
 - Alt text on images
@@ -327,12 +367,14 @@ export async function generateMetadata({ params }) {
 ### Sitemap & Robots
 
 **Auto-generated by GitHub Pages**:
+
 ```
 robots.txt (GitHub provides)
 sitemap.xml (Next.js can generate)
 ```
 
 **File Structure**:
+
 ```
 /                          → index.html
 /wiki                      → wiki/index.html
@@ -347,11 +389,13 @@ All URLs are discoverable by search engines.
 ### Incremental Builds
 
 **First Build**: ~6 seconds
+
 - All pages pre-rendered
 - All images processed
 - CSS fully compiled
 
 **Subsequent Builds**: ~5 seconds
+
 - Turbopack incremental
 - Only changed files rebuild
 - Caching optimized
@@ -367,6 +411,7 @@ Total: ~2.5 MB
 ```
 
 **GitHub Pages Limits**:
+
 - Repository size: 1 GB recommended
 - Page size: No hard limit (practical: <100 MB)
 - Build time: 10 minutes (ours: ~30 seconds)
@@ -378,12 +423,14 @@ Total: ~2.5 MB
 ### Pre-deployment Checks
 
 **Local Testing**:
+
 ```bash
 pnpm build        # Build as if deploying
 pnpm start        # Test production bundle
 ```
 
 **Validation**:
+
 - All links pre-checked at build time
 - All static params validated
 - Build fails if articles missing
@@ -392,6 +439,7 @@ pnpm start        # Test production bundle
 ### Rollback Safety
 
 GitHub Pages keeps previous deployments:
+
 - Automatic rollback on failed build
 - Can manually select previous deployment
 - No risk of broken site from update
@@ -399,6 +447,7 @@ GitHub Pages keeps previous deployments:
 ## Browser Compatibility
 
 **Tested & Optimized**:
+
 - ✅ Chrome/Edge 90+
 - ✅ Firefox 88+
 - ✅ Safari 14+
@@ -406,24 +455,25 @@ GitHub Pages keeps previous deployments:
 - ✅ Chrome Mobile (Android 5+)
 
 **Fallbacks**:
+
 - No ES2020+ features required
 - Graceful degradation without JS
 - Mobile viewport properly configured
 
 ## Summary of Optimizations
 
-| Optimization | Benefit | Status |
-|---|---|---|
-| Static Export | No server needed | ✅ Enabled |
-| MDX Content | Markdown articles | ✅ Configured |
-| Base Path | Subdirectory deployment | ✅ Automatic |
-| GitHub Actions | Automatic deployment | ✅ Workflow added |
-| Pre-rendering | Zero runtime | ✅ All pages static |
-| Image Optimization | Fast loading | ✅ Unoptimized (required) |
-| CSS Purging | Minimal CSS | ✅ Tailwind v4 |
-| Metadata | SEO ready | ✅ Per-page tags |
-| Responsive | Mobile first | ✅ Tailwind responsive |
-| Accessibility | WCAG compliant | ✅ Semantic HTML |
+| Optimization       | Benefit                 | Status                    |
+| ------------------ | ----------------------- | ------------------------- |
+| Static Export      | No server needed        | ✅ Enabled                |
+| MDX Content        | Markdown articles       | ✅ Configured             |
+| Base Path          | Subdirectory deployment | ✅ Automatic              |
+| GitHub Actions     | Automatic deployment    | ✅ Workflow added         |
+| Pre-rendering      | Zero runtime            | ✅ All pages static       |
+| Image Optimization | Fast loading            | ✅ Unoptimized (required) |
+| CSS Purging        | Minimal CSS             | ✅ Tailwind v4            |
+| Metadata           | SEO ready               | ✅ Per-page tags          |
+| Responsive         | Mobile first            | ✅ Tailwind responsive    |
+| Accessibility      | WCAG compliant          | ✅ Semantic HTML          |
 
 ## Result
 
