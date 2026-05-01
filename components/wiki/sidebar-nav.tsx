@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Book } from 'lucide-react'
 
 interface SidebarNavItem {
@@ -19,7 +18,7 @@ export function SidebarNav({ items }: SidebarNavProps) {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col h-screen bg-sidebar">
+    <div className="flex h-screen min-h-0 flex-col bg-sidebar">
       {/* Header */}
       <div className="px-6 py-8 border-b border-sidebar-border">
         <Link 
@@ -37,7 +36,7 @@ export function SidebarNav({ items }: SidebarNavProps) {
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         <nav className="space-y-1 px-3 py-6">
           <Link
             href="/wiki"
@@ -82,7 +81,7 @@ export function SidebarNav({ items }: SidebarNavProps) {
             </Link>
           ))}
         </nav>
-      </ScrollArea>
+      </div>
 
       {/* Footer */}
       <div className="border-t border-sidebar-border px-6 py-4 text-xs text-sidebar-foreground/50">

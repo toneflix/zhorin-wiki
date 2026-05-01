@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { Book, Menu } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Sheet,
   SheetClose,
@@ -59,7 +58,7 @@ export function MobileWikiNav({ items }: MobileWikiNavProps) {
               <SheetDescription>Browse Zhorin wiki articles.</SheetDescription>
             </SheetHeader>
 
-            <ScrollArea className="h-[calc(100vh-96px)]">
+            <div className="h-[calc(100vh-96px)] overflow-y-auto overscroll-contain">
               <nav className="space-y-1 px-3 py-4">
                 <SheetClose asChild>
                   <Link
@@ -95,7 +94,7 @@ export function MobileWikiNav({ items }: MobileWikiNavProps) {
                   </SheetClose>
                 ))}
               </nav>
-            </ScrollArea>
+            </div>
           </SheetContent>
         </Sheet>
       </div>
