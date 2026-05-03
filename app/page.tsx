@@ -70,7 +70,7 @@ export default function Home() {
 
         <div className="mb-16">
           <img
-            src="/images/zhorin-true-blood.png"
+            src="/images/zhorin-true-blood.jpeg"
             alt="The Zhorin"
             className="w-full rounded-lg shadow-lg"
           />
