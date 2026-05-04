@@ -1,10 +1,129 @@
 import { notFound } from 'next/navigation'
+import type { CSSProperties } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { getWikiEntryBySlug, getRelatedEntries, getAllWikiEntries } from '@/lib/wiki'
 import { ArticleHeader } from '@/components/wiki/article-header'
 import { BreadcrumbNav } from '@/components/wiki/breadcrumb-nav'
 import { RelatedArticles } from '@/components/wiki/related-articles'
+
+type MarkdownNode = {
+  type: string
+  children?: MarkdownNode[]
+  value?: string
+  url?: string
+}
+
+type ImageOptions = {
+  align?: 'left' | 'right' | 'center'
+  width?: string
+  height?: string
+}
+
+const IMAGE_ATTRIBUTE_PATTERN = /^\s*\{([^}]*)\}/
+const ATTRIBUTE_PATTERN = /([a-zA-Z][\w-]*)=(?:"([^"]*)"|'([^']*)'|([^\s}]+))/g
+
+function visitMarkdownNode(node: MarkdownNode, visitor: (node: MarkdownNode) => void) {
+  visitor(node)
+  node.children?.forEach((child) => visitMarkdownNode(child, visitor))
+}
+
+function normalizeDimension(value: string | undefined) {
+  if (!value) return undefined
+  const trimmed = value.trim()
+
+  if (/^\d{1,4}$/.test(trimmed)) {
+    return `${trimmed}px`
+  }
+
+  if (/^\d{1,4}(px|rem|em|%)$/.test(trimmed)) {
+    return trimmed
+  }
+
+  return undefined
+}
+
+function parseImageOptions(value: string) {
+  const options: ImageOptions = {}
+
+  for (const match of value.matchAll(ATTRIBUTE_PATTERN)) {
+    const key = match[1]
+    const rawValue = match[2] ?? match[3] ?? match[4]
+
+    if (key === 'align' && ['left', 'right', 'center'].includes(rawValue)) {
+      options.align = rawValue as ImageOptions['align']
+    }
+
+    if (key === 'width') {
+      options.width = normalizeDimension(rawValue)
+    }
+
+    if (key === 'height') {
+      options.height = normalizeDimension(rawValue)
+    }
+  }
+
+  return options
+}
+
+function addImageOptionsToUrl(url: string, options: ImageOptions) {
+  const [path, hash = ''] = url.split('#')
+  const [base, query = ''] = path.split('?')
+  const params = new URLSearchParams(query)
+
+  if (options.align) params.set('wiki-align', options.align)
+  if (options.width) params.set('wiki-width', options.width)
+  if (options.height) params.set('wiki-height', options.height)
+
+  const nextQuery = params.toString()
+  return `${base}${nextQuery ? `?${nextQuery}` : ''}${hash ? `#${hash}` : ''}`
+}
+
+function remarkWikiImages() {
+  return (tree: MarkdownNode) => {
+    visitMarkdownNode(tree, (node) => {
+      if (!node.children) return
+
+      node.children = node.children.flatMap((child, index, children) => {
+        if (child.type !== 'image' || !child.url) return [child]
+
+        const nextChild = children[index + 1]
+        if (nextChild?.type !== 'text' || !nextChild.value) return [child]
+
+        const match = nextChild.value.match(IMAGE_ATTRIBUTE_PATTERN)
+        if (!match) return [child]
+
+        const options = parseImageOptions(match[1])
+        child.url = addImageOptionsToUrl(child.url, options)
+        nextChild.value = nextChild.value.slice(match[0].length)
+
+        return [child]
+      }).filter((child) => child.type !== 'text' || child.value !== '')
+    })
+  }
+}
+
+function getImageRenderOptions(src: string) {
+  const [path, hash = ''] = src.split('#')
+  const [base, query = ''] = path.split('?')
+  const params = new URLSearchParams(query)
+  const align = params.get('wiki-align') || undefined
+  const width = params.get('wiki-width') || undefined
+  const height = params.get('wiki-height') || undefined
+
+  params.delete('wiki-align')
+  params.delete('wiki-width')
+  params.delete('wiki-height')
+
+  const nextQuery = params.toString()
+
+  return {
+    cleanSrc: `${base}${nextQuery ? `?${nextQuery}` : ''}${hash ? `#${hash}` : ''}`,
+    align,
+    width,
+    height,
+  }
+}
 
 interface WikiArticleProps {
   params: Promise<{
@@ -69,9 +188,9 @@ export default async function WikiArticle({ params }: WikiArticleProps) {
         </div>
 
         {/* Content */}
-        <article className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:text-foreground/90 prose-strong:text-foreground prose-em:text-foreground/95 prose-ul:my-6 prose-li:my-2 prose-code:text-sm prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded">
+        <article className="wiki-article prose dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:text-foreground/90 prose-strong:text-foreground prose-em:text-foreground/95 prose-ul:my-6 prose-li:my-2 prose-code:text-sm prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded">
           <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[remarkGfm, remarkWikiImages]}
             components={{
               h1: ({ children }) => (
                 <h1 className="mt-10 mb-5 text-3xl font-bold">{children}</h1>
@@ -103,13 +222,24 @@ export default async function WikiArticle({ params }: WikiArticleProps) {
                   {children}
                 </a>
               ),
-              img: ({ alt, src }) => (
-                <img
-                  src={src || ''}
-                  alt={alt || ''}
-                  className="my-8 w-full rounded-lg border border-border/40 bg-card/40 object-cover"
-                />
-              ),
+              img: ({ alt, src }) => {
+                const imageSrc = typeof src === 'string' ? src : ''
+                const { cleanSrc, align, width, height } = getImageRenderOptions(imageSrc)
+                const style: CSSProperties & Record<string, string | undefined> = {
+                  '--wiki-image-width': width,
+                  '--wiki-image-height': height,
+                }
+
+                return (
+                  <img
+                    src={cleanSrc}
+                    alt={alt || ''}
+                    data-align={align}
+                    className="wiki-article-image rounded-lg border border-border/40 bg-card/40 object-cover"
+                    style={style}
+                  />
+                )
+              },
               blockquote: ({ children }) => (
                 <blockquote className="my-6 border-l-2 border-accent/60 pl-4 text-foreground/80 italic">
                   {children}

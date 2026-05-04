@@ -100,6 +100,8 @@ related: ['Related Title 1', 'Related Title 2']
 
 Content with **bold** and _italic_ text.
 
+![Article image](/images/example.png){width=280 align=right}
+
 - List item 1
 - List item 2
 
@@ -107,6 +109,24 @@ Content with **bold** and _italic_ text.
 
 More content...
 ```
+
+### Image Sizing and Wrapping
+
+Article images can use normal Markdown syntax, or add a small attribute block after the image:
+
+```mdx
+![Alt text](/images/example.png){width=280 align=right}
+```
+
+Supported options:
+
+| Option  | Values                         | Purpose                         |
+| ------- | ------------------------------ | ------------------------------- |
+| `width` | `280`, `280px`, `18rem`, `45%` | Sets the rendered image width   |
+| `height` | `180`, `180px`, `12rem`, `40%` | Sets the rendered image height |
+| `align` | `left`, `right`, `center`      | Wraps text left/right or centers |
+
+Use `align=left` or `align=right` for text wrapping on tablet and desktop widths. On small screens, wrapped images fall back to full-width blocks for readability.
 
 ### 2. Metadata Fields
 

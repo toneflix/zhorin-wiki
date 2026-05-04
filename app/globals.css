@@ -124,3 +124,44 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .wiki-article::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .wiki-article-image {
+    display: block;
+    width: 100%;
+    height: var(--wiki-image-height, auto);
+    margin: 2rem 0;
+  }
+
+  .wiki-article-image[data-align='center'] {
+    width: min(100%, var(--wiki-image-width, 100%));
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @media (min-width: 640px) {
+    .wiki-article-image[data-align='left'],
+    .wiki-article-image[data-align='right'] {
+      width: min(100%, var(--wiki-image-width, 18rem));
+      max-width: 45%;
+      margin-top: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .wiki-article-image[data-align='left'] {
+      float: left;
+      margin-right: 1.5rem;
+    }
+
+    .wiki-article-image[data-align='right'] {
+      float: right;
+      margin-left: 1.5rem;
+    }
+  }
+}
